@@ -6,6 +6,7 @@
     "exactOptionalPropertyTypes": true,
     "target": "ES2022",
     "moduleResolution": "bundler",
+    "types": ["jest"],
     "paths": {
       "@/*": ["./src/*"]
     }
