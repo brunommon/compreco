@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, FlatList, Text, Modal, Pressable, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useSessionStore } from '../../src/store/session-store';
@@ -44,14 +44,16 @@ export default function SessaoScreen() {
         <Text style={styles.fabTexto}>+ Adicionar produto</Text>
       </Pressable>
       <Modal visible={modalAberto} animationType="slide">
-        <SafeAreaView style={styles.flex}>
-          <AddProductForm
-            onSubmit={async (input) => {
-              await addProduct(input);
-              setModalAberto(false);
-            }}
-          />
-        </SafeAreaView>
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.flex}>
+            <AddProductForm
+              onSubmit={async (input) => {
+                await addProduct(input);
+                setModalAberto(false);
+              }}
+            />
+          </SafeAreaView>
+        </SafeAreaProvider>
       </Modal>
     </View>
   );
