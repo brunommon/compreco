@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "ComPreco",
+    "slug": "ComPreco",
+    "version": "1.0.0",
+    "scheme": "compreco",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.ComPreco",
+      "appleTeamId": "NFZPFRK6LM"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-full.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#0b1a4d",
+          "enableFullScreenImage_legacy": true
+        }
+      ]
+    ]
+  }
+}
