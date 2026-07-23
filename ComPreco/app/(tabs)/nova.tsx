@@ -11,13 +11,21 @@ export default function NovaSessaoScreen() {
   const [categoria, setCategoria] = useState('');
   const [erro, setErro] = useState('');
 
+  function handleChangeCategoria(valor: string) {
+    setCategoria(valor);
+    if (erro !== '') setErro('');
+  }
+
   async function criar() {
     const erros = validarCategoria(categoria);
     if (erros.length > 0) {
       setErro(erros[0]?.mensagem ?? '');
       return;
     }
-    if (!storage) return;
+    if (!storage) {
+      setErro('Armazenamento ainda não está pronto. Aguarde um instante e tente novamente.');
+      return;
+    }
     const session = await storage.createSession(categoria);
     setCategoria('');
     setErro('');
@@ -30,7 +38,7 @@ export default function NovaSessaoScreen() {
         testID="input-categoria"
         placeholder="Categoria (ex: arroz)"
         value={categoria}
-        onChangeText={setCategoria}
+        onChangeText={handleChangeCategoria}
         style={styles.input}
       />
       {erro !== '' && <Text style={styles.erro}>{erro}</Text>}
