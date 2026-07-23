@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { View, FlatList, Text, Modal, Pressable, StyleSheet } from 'react-native';
+import { FlatList, Text, Modal, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useSessionStore } from '../../src/store/session-store';
 import { ProductCard } from '../../src/components/product-card';
 import { AddProductForm } from '../../src/components/add-product-form';
+import { ScreenBackground } from '../../src/components/screen-background';
 
 export default function SessaoScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,7 +21,7 @@ export default function SessaoScreen() {
   }, [id, loadSession]);
 
   return (
-    <View style={styles.container}>
+    <ScreenBackground style={styles.container}>
       {products.length === 0 ? (
         <Text style={styles.empty}>Adicione um produto pra comparar.</Text>
       ) : (
@@ -55,12 +56,12 @@ export default function SessaoScreen() {
           </SafeAreaView>
         </SafeAreaProvider>
       </Modal>
-    </View>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 12 },
+  container: { padding: 12 },
   flex: { flex: 1 },
   empty: { padding: 24, textAlign: 'center', color: '#666' },
   fab: { backgroundColor: '#2e7d32', padding: 14, borderRadius: 10, alignItems: 'center', marginTop: 8 },

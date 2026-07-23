@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { View, TextInput, Pressable, Text, StyleSheet } from 'react-native';
+import { TextInput, Pressable, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSessionStore } from '../../src/store/session-store';
 import { validarCategoria } from '../../src/domain/validation';
+import { ScreenBackground } from '../../src/components/screen-background';
 
 export default function NovaSessaoScreen() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function NovaSessaoScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenBackground style={styles.container}>
       <TextInput
         testID="input-categoria"
         placeholder="Categoria (ex: arroz)"
@@ -36,12 +37,12 @@ export default function NovaSessaoScreen() {
       <Pressable testID="botao-criar-sessao" onPress={criar} style={styles.botao}>
         <Text style={styles.botaoTexto}>Criar comparação</Text>
       </Pressable>
-    </View>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, gap: 12 },
+  container: { padding: 16, gap: 12 },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
   erro: { color: '#c62828' },
   botao: { backgroundColor: '#2e7d32', padding: 12, borderRadius: 8, alignItems: 'center' },

@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { FlatList, Text, StyleSheet } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSessionStore } from '../../src/store/session-store';
 import { SessionListItem } from '../../src/components/session-list-item';
+import { ScreenBackground } from '../../src/components/screen-background';
 import { Session } from '../../src/types';
 
 interface Resumo {
@@ -35,14 +36,14 @@ export default function HistoricoScreen() {
 
   if (sessoes.length === 0) {
     return (
-      <View style={styles.container}>
+      <ScreenBackground>
         <Text style={styles.empty}>Nenhuma comparação ainda. Toque em &quot;Nova Comparação&quot;.</Text>
-      </View>
+      </ScreenBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScreenBackground>
       <FlatList
         data={sessoes}
         keyExtractor={(item) => item.id}
@@ -55,11 +56,10 @@ export default function HistoricoScreen() {
           />
         )}
       />
-    </View>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   empty: { padding: 24, textAlign: 'center', color: '#666' },
 });
