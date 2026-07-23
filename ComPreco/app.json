@@ -3,6 +3,7 @@
     "name": "ComPreco",
     "slug": "ComPreco",
     "version": "1.0.0",
+    "scheme": "compreco",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
