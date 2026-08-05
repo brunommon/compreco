@@ -37,4 +37,16 @@ describe('AddProductForm', () => {
 
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  it('deve chamar onCancel e não onSubmit quando toca em cancelar', () => {
+    const onSubmit = jest.fn();
+    const onCancel = jest.fn();
+    const { getByTestId } = render(<AddProductForm onSubmit={onSubmit} onCancel={onCancel} />);
+
+    fireEvent.changeText(getByTestId('input-nome'), 'Arroz');
+    fireEvent.press(getByTestId('botao-cancelar'));
+
+    expect(onCancel).toHaveBeenCalled();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });

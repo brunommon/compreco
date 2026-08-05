@@ -6,9 +6,10 @@ import { UnitPicker } from './unit-picker';
 
 interface Props {
   onSubmit: (input: ProductInput) => void;
+  onCancel?: () => void;
 }
 
-export function AddProductForm({ onSubmit }: Props) {
+export function AddProductForm({ onSubmit, onCancel }: Props): React.JSX.Element {
   const [nome, setNome] = useState('');
   const [preco, setPreco] = useState('');
   const [quantidade, setQuantidade] = useState('');
@@ -57,9 +58,16 @@ export function AddProductForm({ onSubmit }: Props) {
           {erro}
         </Text>
       ))}
-      <Pressable testID="botao-salvar" onPress={handleSubmit} style={styles.botao}>
-        <Text style={styles.botaoTexto}>Salvar</Text>
-      </Pressable>
+      <View style={styles.acoes}>
+        {onCancel && (
+          <Pressable testID="botao-cancelar" onPress={onCancel} style={styles.botaoCancelar}>
+            <Text style={styles.botaoCancelarTexto}>Cancelar</Text>
+          </Pressable>
+        )}
+        <Pressable testID="botao-salvar" onPress={handleSubmit} style={styles.botao}>
+          <Text style={styles.botaoTexto}>Salvar</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -68,6 +76,9 @@ const styles = StyleSheet.create({
   form: { gap: 12, padding: 16 },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
   erro: { color: '#c62828', fontSize: 13 },
-  botao: { backgroundColor: '#2e7d32', padding: 12, borderRadius: 8, alignItems: 'center' },
+  acoes: { flexDirection: 'row', gap: 12 },
+  botao: { flex: 1, backgroundColor: '#2e7d32', padding: 12, borderRadius: 8, alignItems: 'center' },
   botaoTexto: { color: '#fff', fontWeight: '600' },
+  botaoCancelar: { flex: 1, backgroundColor: '#eee', padding: 12, borderRadius: 8, alignItems: 'center' },
+  botaoCancelarTexto: { color: '#333', fontWeight: '600' },
 });

@@ -52,6 +52,7 @@ export default function SessaoScreen() {
                 await addProduct(input);
                 setModalAberto(false);
               }}
+              onCancel={() => setModalAberto(false)}
             />
           </SafeAreaView>
         </SafeAreaProvider>
