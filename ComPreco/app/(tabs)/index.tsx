@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
-import { FlatList, Text, StyleSheet } from 'react-native';
+import { FlatList, Text, Pressable, StyleSheet } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import { Swipeable } from 'react-native-gesture-handler';
 import { useSessionStore } from '../../src/store/session-store';
 import { SessionListItem } from '../../src/components/session-list-item';
 import { ScreenBackground } from '../../src/components/screen-background';
@@ -34,6 +35,16 @@ export default function HistoricoScreen() {
     }, [storage])
   );
 
+  async function excluirSessao(id: string) {
+    if (!storage) return;
+    await storage.deleteSession(id);
+    setSessoes((atual) => atual.filter((s) => s.id !== id));
+    setResumos((atual) => {
+      const { [id]: _removido, ...resto } = atual;
+      return resto;
+    });
+  }
+
   if (sessoes.length === 0) {
     return (
       <ScreenBackground>
@@ -48,12 +59,24 @@ export default function HistoricoScreen() {
         data={sessoes}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <SessionListItem
-            session={item}
-            totalProdutos={resumos[item.id]?.total ?? 0}
-            melhorPreco={resumos[item.id]?.melhor ?? null}
-            onPress={() => router.push(`/session/${item.id}`)}
-          />
+          <Swipeable
+            renderRightActions={() => (
+              <Pressable
+                testID={`botao-excluir-sessao-${item.id}`}
+                onPress={() => excluirSessao(item.id)}
+                style={styles.deleteAction}
+              >
+                <Text style={styles.deleteText}>Excluir</Text>
+              </Pressable>
+            )}
+          >
+            <SessionListItem
+              session={item}
+              totalProdutos={resumos[item.id]?.total ?? 0}
+              melhorPreco={resumos[item.id]?.melhor ?? null}
+              onPress={() => router.push(`/session/${item.id}`)}
+            />
+          </Swipeable>
         )}
       />
     </ScreenBackground>
@@ -62,4 +85,6 @@ export default function HistoricoScreen() {
 
 const styles = StyleSheet.create({
   empty: { padding: 24, textAlign: 'center', color: '#666' },
+  deleteAction: { backgroundColor: '#c62828', justifyContent: 'center', paddingHorizontal: 20 },
+  deleteText: { color: '#fff', fontWeight: '600' },
 });
