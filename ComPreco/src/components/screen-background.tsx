@@ -6,7 +6,7 @@ interface Props {
   style?: StyleProp<ViewStyle>;
 }
 
-export function ScreenBackground({ children, style }: Props) {
+export function ScreenBackground({ children, style }: Props): React.JSX.Element {
   return (
     <View style={styles.root}>
       <Image

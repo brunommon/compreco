@@ -8,7 +8,7 @@ interface Props {
   melhorPreco: boolean;
 }
 
-export function ProductCard({ product, melhorPreco }: Props) {
+export function ProductCard({ product, melhorPreco }: Props): React.JSX.Element {
   const base = unidadeBase(product.unidade);
 
   return (

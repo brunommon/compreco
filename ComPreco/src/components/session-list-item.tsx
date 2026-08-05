@@ -9,7 +9,7 @@ interface Props {
   onPress: () => void;
 }
 
-export function SessionListItem({ session, totalProdutos, melhorPreco, onPress }: Props) {
+export function SessionListItem({ session, totalProdutos, melhorPreco, onPress }: Props): React.JSX.Element {
   const contagem = `${totalProdutos} produto${totalProdutos !== 1 ? 's' : ''}`;
   const sufixo = melhorPreco !== null ? ` · melhor R$ ${melhorPreco.toFixed(2)}` : '';
 
