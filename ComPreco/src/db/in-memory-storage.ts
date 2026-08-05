@@ -38,4 +38,9 @@ export class InMemoryStorage implements Storage {
   async deleteProduct(id: string): Promise<void> {
     this.products = this.products.filter((p) => p.id !== id);
   }
+
+  async deleteSession(id: string): Promise<void> {
+    this.products = this.products.filter((p) => p.sessionId !== id);
+    this.sessions = this.sessions.filter((s) => s.id !== id);
+  }
 }

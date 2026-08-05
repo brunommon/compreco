@@ -64,4 +64,26 @@ describe('InMemoryStorage', () => {
     expect(await storage.listProducts(sessao.id)).toEqual([]);
     expect(await storage.getSession(sessao.id)).not.toBeNull();
   });
+
+  it('deve deletar sessão e seus produtos (cascade)', async () => {
+    const storage = new InMemoryStorage();
+    const sessao = await storage.createSession('arroz');
+    await storage.addProduct(sessao.id, { nome: 'Arroz', preco: 10, quantidade: 1, unidade: 'kg' });
+
+    await storage.deleteSession(sessao.id);
+
+    expect(await storage.getSession(sessao.id)).toBeNull();
+    expect(await storage.listProducts(sessao.id)).toEqual([]);
+  });
+
+  it('deve deletar apenas a sessão informada, mantendo as outras', async () => {
+    const storage = new InMemoryStorage();
+    const sessaoA = await storage.createSession('arroz');
+    const sessaoB = await storage.createSession('feijão');
+
+    await storage.deleteSession(sessaoA.id);
+
+    expect(await storage.getSession(sessaoA.id)).toBeNull();
+    expect(await storage.getSession(sessaoB.id)).not.toBeNull();
+  });
 });

@@ -118,4 +118,10 @@ export class SqliteStorage implements Storage {
   async deleteProduct(id: string): Promise<void> {
     await this.db.runAsync('DELETE FROM products WHERE id = ?', id);
   }
+
+  async deleteSession(id: string): Promise<void> {
+    // FK sem PRAGMA foreign_keys=ON — cascade manual, produtos antes da sessão.
+    await this.db.runAsync('DELETE FROM products WHERE session_id = ?', id);
+    await this.db.runAsync('DELETE FROM sessions WHERE id = ?', id);
+  }
 }

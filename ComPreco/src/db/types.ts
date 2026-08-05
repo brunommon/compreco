@@ -8,4 +8,6 @@ export interface Storage {
   addProduct(sessionId: string, input: ProductInput): Promise<Product>;
   listProducts(sessionId: string): Promise<Product[]>;
   deleteProduct(id: string): Promise<void>;
+  /** Apaga a sessão e todos os produtos vinculados a ela (cascade). */
+  deleteSession(id: string): Promise<void>;
 }
