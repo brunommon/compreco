@@ -32,6 +32,9 @@ export function normalizarQuantidade(quantidade: number, unidade: Unit): number 
 
 /** Preço por unidade base — a métrica usada pra ranquear produtos. */
 export function calcularPrecoUnidadeBase(preco: number, quantidade: number, unidade: Unit): number {
+  if (!(quantidade > 0)) {
+    throw new Error('quantidade deve ser maior que zero');
+  }
   const quantidadeNormalizada = normalizarQuantidade(quantidade, unidade);
   return preco / quantidadeNormalizada;
 }

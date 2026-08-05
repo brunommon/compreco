@@ -56,4 +56,12 @@ describe('calcularPrecoUnidadeBase', () => {
   it('deve calcular preço por unidade (un) corretamente', () => {
     expect(calcularPrecoUnidadeBase(24, 12, 'un')).toBe(2);
   });
+
+  it('deve lançar erro quando quantidade é zero', () => {
+    expect(() => calcularPrecoUnidadeBase(10, 0, 'kg')).toThrow('quantidade deve ser maior que zero');
+  });
+
+  it('deve lançar erro quando quantidade é negativa', () => {
+    expect(() => calcularPrecoUnidadeBase(10, -5, 'kg')).toThrow('quantidade deve ser maior que zero');
+  });
 });
