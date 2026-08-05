@@ -21,4 +21,11 @@ describe('UnitPicker', () => {
     expect(getByTestId('unit-chip-L')).toBeTruthy();
     expect(getByTestId('unit-chip-un')).toBeTruthy();
   });
+
+  it('deve marcar o chip selecionado como selected pra acessibilidade', () => {
+    const { getByTestId } = render(<UnitPicker value="kg" onChange={jest.fn()} />);
+
+    expect(getByTestId('unit-chip-kg').props.accessibilityState).toEqual({ selected: true });
+    expect(getByTestId('unit-chip-g').props.accessibilityState).toEqual({ selected: false });
+  });
 });
