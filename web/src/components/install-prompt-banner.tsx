@@ -24,6 +24,10 @@ export function InstallPromptBanner() {
       setEvento(e as BeforeInstallPromptEvent);
     }
     window.addEventListener('beforeinstallprompt', aoDisponibilizar);
+    // Necessário fazer setState síncrono aqui (não lazy initializer): `navigator` é
+    // undefined no SSR, então o primeiro render (servidor e cliente) precisa ser `false`
+    // para não gerar hydration mismatch em iOS real; corrigimos após montar.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMostrarIOS(ehIOSSafari());
     return () => window.removeEventListener('beforeinstallprompt', aoDisponibilizar);
   }, []);
