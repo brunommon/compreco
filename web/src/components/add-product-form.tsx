@@ -28,7 +28,10 @@ export function AddProductForm({ onSubmit, onCancel }: AddProductFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="fixed inset-x-0 bottom-0 rounded-t-2xl bg-white p-4 shadow-2xl">
+    <form
+      onSubmit={handleSubmit}
+      className="fixed inset-x-0 bottom-0 z-40 rounded-t-2xl bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl"
+    >
       <label htmlFor="nome" className="mb-1 block text-sm text-gray-600">
         Produto
       </label>

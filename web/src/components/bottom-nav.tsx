@@ -10,7 +10,7 @@ const ITEMS = [
 export function BottomNav() {
   const pathname = usePathname();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 flex border-t bg-white pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 flex border-t bg-white pb-[env(safe-area-inset-bottom)]">
       {ITEMS.map((item) => {
         const active = pathname === item.href;
         return (

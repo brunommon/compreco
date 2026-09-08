@@ -1,8 +1,28 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AddProductForm } from '../add-product-form';
+import { BottomNav } from '../bottom-nav';
+
+jest.mock('next/navigation', () => ({
+  usePathname: () => '/',
+}));
 
 describe('AddProductForm', () => {
+  it('fica acima do BottomNav (z-index maior) para o botão Salvar não ficar coberto', () => {
+    render(
+      <>
+        <AddProductForm onSubmit={jest.fn()} onCancel={jest.fn()} />
+        <BottomNav />
+      </>,
+    );
+
+    const form = screen.getByRole('button', { name: 'Salvar' }).closest('form');
+    const nav = screen.getByRole('navigation');
+
+    expect(form).toHaveClass('z-40');
+    expect(nav).toHaveClass('z-30');
+  });
+
   it('mostra erro inline e não chama onSubmit quando preço é zero', async () => {
     const onSubmit = jest.fn();
     render(<AddProductForm onSubmit={onSubmit} onCancel={jest.fn()} />);
