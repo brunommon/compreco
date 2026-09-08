@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Você está offline — ComPreço</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f9fafb;
+        color: #111827;
+        text-align: center;
+      }
+      main {
+        max-width: 360px;
+      }
+      h1 {
+        font-size: 1.125rem;
+        margin-bottom: 8px;
+      }
+      p {
+        color: #6b7280;
+        font-size: 0.9375rem;
+        line-height: 1.5;
+      }
+      button {
+        margin-top: 16px;
+        border: none;
+        border-radius: 8px;
+        background: #2563eb;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 0.9375rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Sem conexão</h1>
+      <p>
+        Essa página ainda não foi aberta neste aparelho com internet, então não dá pra carregar ela offline agora.
+        Abra-a uma vez com sinal e ela passa a funcionar offline depois.
+      </p>
+      <button type="button" onclick="location.reload()">Tentar de novo</button>
+    </main>
+  </body>
+</html>
