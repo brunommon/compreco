@@ -26,10 +26,23 @@ export function SessionListItem({ session, produtos, onDelete }: SessionListItem
     setArrastoX(Math.min(0, e.clientX - inicioX));
   }
 
+  function confirmarExclusao(): boolean {
+    return window.confirm(
+      `Apagar a sessão "${session.categoria}" e todos os seus produtos? Essa ação não pode ser desfeita.`
+    );
+  }
+
   function handlePointerUp() {
     if (arrastoX <= -LIMITE_SWIPE) {
-      onDelete(session.id);
+      if (confirmarExclusao()) {
+        onDelete(session.id);
+      }
     }
+    setArrastoX(0);
+    setInicioX(null);
+  }
+
+  function handlePointerCancel() {
     setArrastoX(0);
     setInicioX(null);
   }
@@ -37,7 +50,9 @@ export function SessionListItem({ session, produtos, onDelete }: SessionListItem
   function handleDeleteClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     e.stopPropagation();
-    onDelete(session.id);
+    if (confirmarExclusao()) {
+      onDelete(session.id);
+    }
   }
 
   return (
@@ -45,7 +60,8 @@ export function SessionListItem({ session, produtos, onDelete }: SessionListItem
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      style={{ transform: `translateX(${arrastoX}px)` }}
+      onPointerCancel={handlePointerCancel}
+      style={{ transform: `translateX(${arrastoX}px)`, touchAction: 'pan-y' }}
       className="flex items-center justify-between border-b p-4 transition-transform"
     >
       <Link href={`/session/${session.id}`} className="flex flex-1 items-center justify-between">

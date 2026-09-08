@@ -29,7 +29,8 @@ describe('HistoricoPage', () => {
     expect(await screen.findByText('Arroz')).toBeInTheDocument();
   });
 
-  it('remove a sessão da lista ao clicar em Remover', async () => {
+  it('remove a sessão da lista ao clicar em Remover e confirmar', async () => {
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
     const storage = new InMemoryStorage();
     await storage.createSession('Arroz');
     (getStorage as jest.Mock).mockResolvedValue(storage);
@@ -43,5 +44,25 @@ describe('HistoricoPage', () => {
     expect(screen.queryByText('Arroz')).not.toBeInTheDocument();
     expect(await screen.findByText(/Nenhuma comparação ainda/)).toBeInTheDocument();
     expect(await storage.listSessions()).toHaveLength(0);
+
+    jest.restoreAllMocks();
+  });
+
+  it('não remove a sessão quando o usuário cancela a confirmação', async () => {
+    jest.spyOn(window, 'confirm').mockReturnValue(false);
+    const storage = new InMemoryStorage();
+    await storage.createSession('Arroz');
+    (getStorage as jest.Mock).mockResolvedValue(storage);
+
+    render(<HistoricoPage />);
+
+    expect(await screen.findByText('Arroz')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remover Arroz' }));
+
+    expect(screen.getByText('Arroz')).toBeInTheDocument();
+    expect(await storage.listSessions()).toHaveLength(1);
+
+    jest.restoreAllMocks();
   });
 });

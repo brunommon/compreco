@@ -10,6 +10,10 @@ function criarProduto(overrides: Partial<Product>): Product {
 }
 
 describe('SessionListItem', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('mostra categoria, quantidade de produtos e melhor preço', () => {
     render(
       <SessionListItem
@@ -29,15 +33,28 @@ describe('SessionListItem', () => {
     expect(screen.queryByText(/^R\$/)).not.toBeInTheDocument();
   });
 
-  it('chama onDelete com o id da sessão ao clicar em Remover', async () => {
+  it('chama onDelete com o id da sessão ao clicar em Remover e confirmar', async () => {
     const onDelete = jest.fn();
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
     render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
     await userEvent.click(screen.getByRole('button', { name: 'Remover Arroz' }));
+    expect(confirmSpy).toHaveBeenCalledWith(
+      'Apagar a sessão "Arroz" e todos os seus produtos? Essa ação não pode ser desfeita.'
+    );
     expect(onDelete).toHaveBeenCalledWith('s1');
+  });
+
+  it('não chama onDelete ao clicar em Remover quando o usuário cancela a confirmação', async () => {
+    const onDelete = jest.fn();
+    jest.spyOn(window, 'confirm').mockReturnValue(false);
+    render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Remover Arroz' }));
+    expect(onDelete).not.toHaveBeenCalled();
   });
 
   it('clicar em Remover não navega (link não é acionado)', async () => {
     const onDelete = jest.fn();
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
     render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
     const botao = screen.getByRole('button', { name: 'Remover Arroz' });
     const evento = createEvent.click(botao);
@@ -47,8 +64,9 @@ describe('SessionListItem', () => {
     expect(onDelete).toHaveBeenCalledWith('s1');
   });
 
-  it('chama onDelete ao arrastar além do limite de swipe', () => {
+  it('chama onDelete ao arrastar além do limite de swipe e confirmar', () => {
     const onDelete = jest.fn();
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
     const { container } = render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
     const card = container.firstChild as HTMLElement;
 
@@ -59,8 +77,38 @@ describe('SessionListItem', () => {
     expect(onDelete).toHaveBeenCalledWith('s1');
   });
 
+  it('não chama onDelete ao arrastar além do limite de swipe quando o usuário cancela a confirmação', () => {
+    const onDelete = jest.fn();
+    jest.spyOn(window, 'confirm').mockReturnValue(false);
+    const { container } = render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
+    const card = container.firstChild as HTMLElement;
+
+    fireEvent.pointerDown(card, { clientX: 200 });
+    fireEvent.pointerMove(card, { clientX: 100 });
+    fireEvent.pointerUp(card);
+
+    expect(onDelete).not.toHaveBeenCalled();
+  });
+
+  it('pointercancel reseta o arrasto sem apagar a sessão', () => {
+    const onDelete = jest.fn();
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
+    const { container } = render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
+    const card = container.firstChild as HTMLElement;
+
+    fireEvent.pointerDown(card, { clientX: 200 });
+    fireEvent.pointerMove(card, { clientX: 100 });
+    fireEvent.pointerCancel(card);
+    fireEvent.pointerUp(card);
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(onDelete).not.toHaveBeenCalled();
+    expect(card).toHaveStyle({ transform: 'translateX(0px)' });
+  });
+
   it('arrastar além do limite de swipe apaga a sessão sem navegar (isolamento swipe/navegação)', () => {
     const onDelete = jest.fn();
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
     const { container } = render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
     const card = container.firstChild as HTMLElement;
     const link = screen.getByRole('link');
