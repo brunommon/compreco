@@ -48,4 +48,30 @@ describe('AddProductForm', () => {
 
     expect(onSubmit).toHaveBeenCalledWith({ nome: 'Arroz 5kg', preco: 25, quantidade: 5, unidade: 'ml' });
   });
+
+  it('aceita vírgula como separador decimal no preço (teclado numérico PT-BR)', async () => {
+    const onSubmit = jest.fn();
+    render(<AddProductForm onSubmit={onSubmit} onCancel={jest.fn()} />);
+
+    await userEvent.type(screen.getByLabelText('Produto'), 'Arroz 5kg');
+    await userEvent.type(screen.getByLabelText('Preço (R$)'), '4,55');
+    await userEvent.type(screen.getByLabelText('Quantidade'), '1');
+    await userEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+
+    expect(onSubmit).toHaveBeenCalledWith({ nome: 'Arroz 5kg', preco: 4.55, quantidade: 1, unidade: 'kg' });
+    expect(screen.queryByText('preço deve ser maior que zero')).not.toBeInTheDocument();
+  });
+
+  it('aceita vírgula como separador decimal na quantidade', async () => {
+    const onSubmit = jest.fn();
+    render(<AddProductForm onSubmit={onSubmit} onCancel={jest.fn()} />);
+
+    await userEvent.type(screen.getByLabelText('Produto'), 'Azeite');
+    await userEvent.type(screen.getByLabelText('Preço (R$)'), '10');
+    await userEvent.type(screen.getByLabelText('Quantidade'), '1,5');
+    await userEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+
+    expect(onSubmit).toHaveBeenCalledWith({ nome: 'Azeite', preco: 10, quantidade: 1.5, unidade: 'kg' });
+    expect(screen.queryByText('quantidade deve ser maior que zero')).not.toBeInTheDocument();
+  });
 });

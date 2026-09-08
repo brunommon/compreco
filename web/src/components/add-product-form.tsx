@@ -18,7 +18,13 @@ export function AddProductForm({ onSubmit, onCancel }: AddProductFormProps) {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const input = { nome, preco: Number(preco), quantidade: Number(quantidade) };
+    // Teclado numérico PT-BR envia vírgula como separador decimal (ex: "4,55");
+    // Number() só entende ponto, então normalizamos antes de converter.
+    const input = {
+      nome,
+      preco: Number(preco.replace(',', '.')),
+      quantidade: Number(quantidade.replace(',', '.')),
+    };
     const listaErros = validarProduto(input);
     if (listaErros.length > 0) {
       setErros(Object.fromEntries(listaErros.map((err) => [err.campo, err.mensagem])));
