@@ -23,6 +23,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   loadSession: async (sessionId) => {
     const { storage } = get();
     if (!storage) throw new Error('storage não configurado');
+    set({ activeSession: null, products: [] });
     const [session, products] = await Promise.all([
       storage.getSession(sessionId),
       storage.listProducts(sessionId),
