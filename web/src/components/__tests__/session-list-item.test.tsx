@@ -58,4 +58,35 @@ describe('SessionListItem', () => {
 
     expect(onDelete).toHaveBeenCalledWith('s1');
   });
+
+  it('arrastar além do limite de swipe apaga a sessão sem navegar (isolamento swipe/navegação)', () => {
+    const onDelete = jest.fn();
+    const { container } = render(<SessionListItem session={session} produtos={[]} onDelete={onDelete} />);
+    const card = container.firstChild as HTMLElement;
+    const link = screen.getByRole('link');
+    const botao = screen.getByRole('button', { name: 'Remover Arroz' });
+    const cliqueNoLink = jest.fn();
+    link.addEventListener('click', cliqueNoLink);
+
+    fireEvent.pointerDown(card, { clientX: 200 });
+    fireEvent.pointerMove(card, { clientX: 100 });
+    fireEvent.pointerUp(card);
+
+    expect(onDelete).toHaveBeenCalledWith('s1');
+    // o gesto de swipe não deve disparar clique no link (que dispararia navegação num browser real)
+    expect(cliqueNoLink).not.toHaveBeenCalled();
+    // o botão "Remover" precisa ser irmão do link, nunca descendente dele —
+    // é essa estrutura que impede o clique de disparar navegação
+    expect(link.contains(botao)).toBe(false);
+  });
+
+  it('toque na linha (fora do botão Remover) permanece dentro do link para /session/[id]', async () => {
+    render(<SessionListItem session={session} produtos={[]} onDelete={jest.fn()} />);
+    const categoria = screen.getByText('Arroz');
+
+    await userEvent.click(categoria);
+
+    const link = categoria.closest('a');
+    expect(link).toHaveAttribute('href', '/session/s1');
+  });
 });
