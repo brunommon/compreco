@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import HistoricoPage from '../page';
 import { InMemoryStorage } from '../../db/in-memory-storage';
 
@@ -26,5 +27,21 @@ describe('HistoricoPage', () => {
     render(<HistoricoPage />);
 
     expect(await screen.findByText('Arroz')).toBeInTheDocument();
+  });
+
+  it('remove a sessão da lista ao clicar em Remover', async () => {
+    const storage = new InMemoryStorage();
+    await storage.createSession('Arroz');
+    (getStorage as jest.Mock).mockResolvedValue(storage);
+
+    render(<HistoricoPage />);
+
+    expect(await screen.findByText('Arroz')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remover Arroz' }));
+
+    expect(screen.queryByText('Arroz')).not.toBeInTheDocument();
+    expect(await screen.findByText(/Nenhuma comparação ainda/)).toBeInTheDocument();
+    expect(await storage.listSessions()).toHaveLength(0);
   });
 });
