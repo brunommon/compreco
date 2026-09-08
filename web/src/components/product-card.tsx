@@ -1,6 +1,7 @@
 'use client';
 import { PointerEvent, useState } from 'react';
 import { Product } from '../types';
+import { unidadeBase } from '../domain/units';
 
 interface ProductCardProps {
   product: Product;
@@ -31,12 +32,18 @@ export function ProductCard({ product, melhor, onDelete }: ProductCardProps) {
     setInicioX(null);
   }
 
+  function handlePointerCancel() {
+    setArrastoX(0);
+    setInicioX(null);
+  }
+
   return (
     <div
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      style={{ transform: `translateX(${arrastoX}px)` }}
+      onPointerCancel={handlePointerCancel}
+      style={{ transform: `translateX(${arrastoX}px)`, touchAction: 'pan-y' }}
       className={`flex items-center justify-between border-b p-4 transition-transform ${melhor ? 'bg-green-50' : ''}`}
     >
       <div>
@@ -46,7 +53,7 @@ export function ProductCard({ product, melhor, onDelete }: ProductCardProps) {
         <p className="font-medium">{product.nome}</p>
         <p className="text-sm text-gray-500">
           R$ {product.preco.toFixed(2)} · {product.quantidade}
-          {product.unidade} · R$ {product.precoUnidadeBase.toFixed(2)}/{product.unidade}
+          {product.unidade} · R$ {product.precoUnidadeBase.toFixed(2)}/{unidadeBase(product.unidade)}
         </p>
       </div>
       <button type="button" onClick={() => onDelete(product.id)} aria-label={`Remover ${product.nome}`} className="text-red-600">
