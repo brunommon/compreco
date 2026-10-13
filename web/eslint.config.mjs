@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     // Serwist build artifacts (generated service worker):
     "public/sw.js",
     "public/sw.js.map",
+    // Config do Jest usa require() por design:
+    "jest.config.js",
   ]),
 ]);
 
